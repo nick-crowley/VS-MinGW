@@ -1,0 +1,224 @@
+<!--
+***********************************************************************************************
+Android.Common.props
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+
+Copyright (C) Microsoft Corporation. All rights reserved.
+***********************************************************************************************
+-->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildThisFileDirectory)ImportBefore\*.props" Condition="Exists('$(MSBuildThisFileDirectory)ImportBefore')" />
+
+
+  <PropertyGroup>
+    <!-- Required for enabling Team Build projects -->
+    <!--<OutDirWasSpecified Condition=" '$(OutDir)'!='' AND '$(OutDirWasSpecified)'=='' ">true</OutDirWasSpecified>
+    <OutDirWasSpecified Condition=" '$(OutDir)'=='' AND '$(OutDirWasSpecified)'=='' ">false</OutDirWasSpecified>-->
+
+    <IntDir Condition="'$(IntDir)'=='' AND '$(IntermediateOutputPath)'!=''">$(IntermediateOutputPath)</IntDir>
+    <IntDir Condition="'$(IntDir)'=='' AND '$(IntermediateOutputPath)'==''">$(Platform)\$(Configuration)\</IntDir>
+    <OutDir Condition="'$(OutDir)'=='' AND '$(SolutionDir)' == ''">$(IntDir)</OutDir>
+    <OutDir Condition="'$(OutDir)'=='' AND '$(SolutionDir)' != ''">$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+
+    <!-- Disable Microsoft specific frameworks -->
+    <UseOfMFC>false</UseOfMFC>
+    <UseOfATL>false</UseOfATL>
+    
+    <!-- Unicode response files -->
+    <CharacterSet>Unicode</CharacterSet>
+		
+   </PropertyGroup>
+
+  <!-- Provide default values if necessary -->
+  <PropertyGroup>
+    <!--Project name-->
+    <ProjectName Condition="'$(ProjectName)' == ''">$(MSBuildProjectName)</ProjectName>
+
+    <ExtensionsToDeleteOnClean Condition="'$(ExtensionsToDeleteOnClean)' == ''">*.d;*.tlog;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+    <PreBuildEventUseInBuild Condition="'$(PreBuildEventUseInBuild)' == ''">true</PreBuildEventUseInBuild>
+    <PreLinkEventUseInBuild Condition="'$(PreLinkEventUseInBuild)' == ''">true</PreLinkEventUseInBuild>
+    <PostBuildEventUseInBuild Condition="'$(PostBuildEventUseInBuild)' == ''">true</PostBuildEventUseInBuild>
+  </PropertyGroup>
+  
+	
+  <!-- ConfigurationType Specific values -->
+  <PropertyGroup Condition="'$(ConfigurationType)' == 'Application' or '$(ConfigurationType)' == ''">
+    <LinkCompiled>true</LinkCompiled>
+    <TargetExt>.exe</TargetExt>
+    <OutputType>exe</OutputType>
+    <TargetName Condition="'$(TargetName)' == ''">$(RootNamespace)</TargetName>
+  </PropertyGroup>
+	
+  <!-- ConfigurationType Specific values -->
+  <PropertyGroup Condition="'$(ConfigurationType)' == 'DynamicLibrary'">
+    <!-- $(GenerateImportLib) should be set to true when you want to generate the import library as part of the BuildCompile pass rather than wait
+         until the BuildLink pass for Linker to generate it. This allows circular dependencies between dlls to be satisfied when building using passes -->
+    <ImpLibCompiled Condition="'$(GenerateImportLib)'=='true'">true</ImpLibCompiled>
+    <LinkCompiled>true</LinkCompiled>
+    <TargetExt>.so</TargetExt>
+    <OutputType>library</OutputType>
+    <TargetName Condition="'$(TargetName)' == ''">lib$(RootNamespace)</TargetName>
+  </PropertyGroup>
+
+   <PropertyGroup Condition="'$(ConfigurationType)' == 'StaticLibrary'">
+    <LibCompiled>true</LibCompiled>
+    <TargetExt>.a</TargetExt>
+    <OutputType>staticlibrary</OutputType>
+    <TargetName Condition="'$(TargetName)' == ''">lib$(RootNamespace)</TargetName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- VCInstallDir and WindowsSdkDir are required to statisfy the missing directory detection. -->
+    <VCInstallDir Condition="'$(VCInstallDir)' == ''">VCInstallDir_is_not_defined</VCInstallDir>
+    <WindowsSdkDir Condition="'$(WindowsSdkDir)' == ''">WindowsSdkDir_is_not_defined</WindowsSdkDir>
+    <_CheckDev11ToolsInstalled>false</_CheckDev11ToolsInstalled>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <CustomBuild>
+      <Message                     Condition="'%(CustomBuild.Message)'                    == ''">Performing Custom Build Tools</Message>
+      <LinkObjects                 Condition="'%(CustomBuild.LinkObjects)'                == ''">true</LinkObjects>
+      <TreatOutputAsContent        Condition="'%(CustomBuild.TreatOutputAsContent)'       == ''">false</TreatOutputAsContent>
+      <TrackerLogDirectory         Condition="'%(CustomBuild.TrackerLogDirectory)'        == ''">$(TLogLocation)</TrackerLogDirectory>
+      <MinimalRebuildFromTracking  Condition="'%(CustomBuild.MinimalRebuildFromTracking)' == ''">true</MinimalRebuildFromTracking>
+      <AcceptableNonZeroExitCodes  Condition="'%(CustomBuild.AcceptableNonZeroExitCodes)' == ''">$(AcceptableNonZeroExitCodes)</AcceptableNonZeroExitCodes>
+    </CustomBuild>
+    <CustomBuildStep>
+      <Message                     Condition="'%(CustomBuildStep.Message)'==''" >Performing Custom Build Step</Message>
+    </CustomBuildStep>
+    <ProjectReference>
+      <LinkLibraryDependencies      Condition="'%(ProjectReference.LinkLibraryDependencies)' == '' and '$(ConfigurationType)' == 'StaticLibrary'">false</LinkLibraryDependencies>
+      <LinkLibraryDependencies      Condition="'%(ProjectReference.LinkLibraryDependencies)' == ''">true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs   Condition="'%(ProjectReference.UseLibraryDependencyInputs)' == ''">false</UseLibraryDependencyInputs>
+      <ReferenceOutputAssembly      Condition="'%(ProjectReference.ReferenceOutputAssembly)' == ''">true</ReferenceOutputAssembly>
+      <!--<Private                      Condition="'%(ProjectReference.Private)' == ''">true</Private>-->
+    </ProjectReference>
+
+  <!-- *******************************************************************************************
+        Common Compile Options
+       ******************************************************************************************* -->
+    <ClCompile>
+      <!--Debug mode-->
+      <DebugInformation Condition="'$(UseDebugLibraries)' == 'true'">Full</DebugInformation>
+      <Optimization Condition="'$(UseDebugLibraries)' == 'true'">Disabled</Optimization>
+      <OmitFramePointers Condition="'$(UseDebugLibraries)' == 'true'">false</OmitFramePointers>
+      <FunctionLevelLinking Condition="'$(UseDebugLibraries)' == 'true'">false</FunctionLevelLinking>
+      <DataLevelLinking Condition="'$(UseDebugLibraries)' == 'true'">false</DataLevelLinking>
+
+      <!--Release mode-->
+      <DebugInformation Condition="'$(UseDebugLibraries)' != 'true'">Minimal</DebugInformation>
+      <PreprocessorDefinitions Condition="'$(UseDebugLibraries)' != 'true'">NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Optimization Condition="'$(UseDebugLibraries)' != 'true'">Full</Optimization>
+      <OmitFramePointers Condition="'$(UseDebugLibraries)' != 'true'">true</OmitFramePointers>
+      <FunctionLevelLinking Condition="'$(UseDebugLibraries)' != 'true'">true</FunctionLevelLinking>
+      <DataLevelLinking Condition="'$(UseDebugLibraries)' != 'true'">true</DataLevelLinking>
+
+      <!--General-->
+			<Verbose>false</Verbose>
+			<Pedantic>false</Pedantic>
+			<WarningLevel>Default</WarningLevel>
+			<DebugInformationFormat>DWARF2</DebugInformationFormat>
+			
+			<WarnReorder>Disable</WarnReorder>
+			<WarnSwitch>Disable</WarnSwitch>
+			<WarnSwitchDefault>Disable</WarnSwitchDefault>
+			
+			
+      <ClangMode>true</ClangMode>
+      <StrictAliasing>false</StrictAliasing>
+      <ProgramDatabaseFileName>$(IntDir)</ProgramDatabaseFileName>
+      <ExceptionHandling>Enabled</ExceptionHandling>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <PositionIndependentCode>true</PositionIndependentCode>
+			
+			<!--Language-->
+      <UseShortEnums>false</UseShortEnums>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <CLanguageStandard>c11</CLanguageStandard>
+      <CppLanguageStandard>c++1y</CppLanguageStandard>
+			
+			
+      <ObjectFileName>$(IntDir)%(filename).o</ObjectFileName>
+      <CompileAs>Default</CompileAs>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      
+      <EnablePREfast Condition="'%(ClCompile.EnablePREfast)' == ''">false</EnablePREfast>
+      <OmitFramePointers Condition="'%(ClCompile.OmitFramePointers)' == ''">false</OmitFramePointers>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+			
+			<!--Precompiled Headers-->
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderOutputFileDirectory>$(IntDir)</PrecompiledHeaderOutputFileDirectory>
+      <PrecompiledHeaderOutputFile></PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderCompileAs>CompileAsCpp</PrecompiledHeaderCompileAs>
+    </ClCompile>
+    
+  <!-- *******************************************************************************************
+        Common Linker Options
+       ******************************************************************************************* -->
+    <Link>
+      <ShowProgress>false</ShowProgress>
+      <Version>false</Version>
+      <VerboseOutput>false</VerboseOutput>
+      <IncrementalLink>false</IncrementalLink>
+      <UnresolvedSymbolReferences>true</UnresolvedSymbolReferences>
+      <OptimizeForMemory>false</OptimizeForMemory>
+      <DebuggerSymbolInformation>true</DebuggerSymbolInformation>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <LibraryDependencies></LibraryDependencies>
+			<Subsystem Condition="'$(ConfigurationType)' == 'Application'">Windows</Subsystem>
+			<Subsystem Condition="'$(ConfigurationType)' == 'Console'">Console</Subsystem>
+      <Subsystem Condition="'$(ConfigurationType)' == 'DynamicLibrary'">DLL</Subsystem>
+			<Win32Build>true</Win32Build>
+			<ThreadSupport>true</ThreadSupport>
+			<UnicodeBuild>true</UnicodeBuild>
+    </Link>
+
+  <!-- *******************************************************************************************
+        Common Library Options
+       ******************************************************************************************* -->
+    <Lib>
+      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <Command>Replacement</Command>
+      <CreateIndex>true</CreateIndex>
+    </Lib>
+  </ItemDefinitionGroup>
+
+  <!-- *******************************************************************************************
+        Common Strip Options
+       ******************************************************************************************* -->
+  <PropertyGroup>
+    <StripOptions>--strip-unneeded $(StripOptions)</StripOptions>
+    <PackageDebugSymbols>false</PackageDebugSymbols>
+  </PropertyGroup>
+
+	
+  <PropertyGroup>
+    <!-- Disables the Manifest/DocumentXml tools as they are not relevant -->
+    <!-- <UseDefaultProjectTools>true</UseDefaultProjectTools> -->
+
+    <!-- Hide default General Page to show our own -->
+    <UseDefaultGeneralPropertyPageSchema>false</UseDefaultGeneralPropertyPageSchema>
+  </PropertyGroup>
+	
+  <!-- *******************************************************************************************
+        Common Debugger Options
+       ******************************************************************************************* -->
+  <PropertyGroup>
+    <!--  Initial Debugger page and debugger -->
+    <DebuggerFlavor>AndroidDebugger</DebuggerFlavor>
+    <DebuggerType>NativeOnly</DebuggerType>
+    
+    <GetResolvedLinkLibs_Order Condition="'$(GetResolvedLinkLibs_Order)' == ''">BreadthFirst</GetResolvedLinkLibs_Order>
+    
+  </PropertyGroup>
+
+
+
+  <Import Project="$(MSBuildThisFileDirectory)ImportAfter\*.props" Condition="Exists('$(MSBuildThisFileDirectory)ImportAfter')" />
+</Project>

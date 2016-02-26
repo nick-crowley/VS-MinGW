@@ -1,0 +1,42 @@
+﻿<!--
+***********************************************************************************************
+ MinGW / Clang v3.8 : Toolset properties
+
+ Toolset.props : Defines the locations of binaries, headers, and libraries for Clang
+***********************************************************************************************
+-->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildThisFileDirectory)ImportBefore\*.props" Condition="Exists('$(MSBuildThisFileDirectory)ImportBefore')" />
+
+  <!-- *******************************************************************************************
+        Import Platform.Common.props
+       ******************************************************************************************* -->
+  <Import Project="$(_PlatformFolder)\Platform.Common.props" />
+
+  <!--Compiler-->
+  <PropertyGroup>
+    <GNUMode>true</GNUMode>
+    <MSVCErrorReport>true</MSVCErrorReport>
+		
+		<!-- Use the same BIN path now-->
+		<MinGWInstallFolder Condition="'$(MinGWInstallFolder)' == ''">MISSING</MinGWInstallFolder>
+    <LLVMInstallFolder Condition="'$(LLVMInstallFolder)' == ''">MISSING</LLVMInstallFolder>
+  </PropertyGroup>
+
+	
+  <ItemDefinitionGroup>
+		<!--Define path of operating system and standard library headers-->
+    <ClCompile>
+      <SystemIncludeDirectories>$(IncludePath);$(StdIncludeFolder)</SystemIncludeDirectories>
+    </ClCompile>
+		
+    <Link>
+      <AdditionalLibraryDirectories>$(MinGWInstallFolder)\lib;$(StlLibraryPath);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath>$(MinGWInstallFolder)\lib;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
+    </Link>
+  </ItemDefinitionGroup>
+	
+
+  <Import Project="$(MSBuildThisFileDirectory)ImportAfter\*.props" Condition="Exists('$(MSBuildThisFileDirectory)ImportAfter')" />
+</Project>

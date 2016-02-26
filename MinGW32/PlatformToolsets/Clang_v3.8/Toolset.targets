@@ -1,0 +1,76 @@
+﻿<!--
+***********************************************************************************************
+ MinGW / Clang v3.6 : Toolset actions
+
+ Toolset.targets : Installs GDB and Imports the stock, platform, and toolset actions
+***********************************************************************************************
+-->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildThisFileDirectory)ImportBefore\*.targets" Condition="Exists('$(MSBuildThisFileDirectory)ImportBefore')" />
+
+  <!--Disable debugger property page-->
+   <PropertyGroup>
+    <UseDefaultDebuggersPropertyPageSchemas>false</UseDefaultDebuggersPropertyPageSchemas>
+    <_ApplicableDebuggers>Desktop</_ApplicableDebuggers>
+  </PropertyGroup> 
+
+  <!--Customize debugger propery Page-->
+   <ItemGroup>
+    <DesktopDebuggerPages Include="$(_PlatformFolder)$(LangID)\debugger_gdb.xml" />
+  </ItemGroup>
+
+
+  <!-- *******************************************************************************************
+        Binaries and headers location
+       ******************************************************************************************* -->
+  <PropertyGroup>
+    <StdIncludeFolder>$(MinGWInstallFolder)\mingw32\lib\gcc\mingw32\4.8.1\include\c++</StdIncludeFolder>
+    <StlLibraryPath>$(MinGWInstallFolder)\mingw32\lib\gcc\mingw32\4.8.1</StlLibraryPath>
+
+    <ExecutablePath>$(LLVMInstallFolder)\bin;$(MinGWInstallFolder)\bin;$(MSBuild_ExecutablePath);$(PATH)</ExecutablePath>
+    <IncludePath>$(LLVMInstallFolder)\lib\clang\3.8.0\include;$(MinGWInstallFolder)\include;$(MinGWInstallFolder)\mingw32\lib\gcc\mingw32\4.8.1\include;$(StdIncludeFolder);$(IncludePath)</IncludePath>
+    <LibraryPath>$(LLVMInstallFolder)\lib\clang\3.8.0\lib\windows;$(LLVMInstallFolder)\lib;$(MinGWInstallFolder)\lib;$(StlLibraryPath);$(MinGWInstallFolder)\lib\gcc\mingw32\4.8.1;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+
+
+  <!-- Tools location -->
+  <PropertyGroup>
+    <ArchiveToolPath>$(LLVMInstallFolder)\bin</ArchiveToolPath>
+    <ArchiveToolExe>$(ArchiveToolPath)\ar.exe</ArchiveToolExe>
+
+    <StripToolPath>$(LLVMInstallFolder)\bin</StripToolPath>
+    <StripToolExe>$(StripToolPath)\strip.exe</StripToolExe>
+
+    <GccToolPath>$(MinGWInstallFolder)\bin</GccToolPath>
+    <GccToolExe>$(GccToolPath)\g++.exe</GccToolExe>
+
+    <ClangToolPath>$(LLVMInstallFolder)\bin</ClangToolPath>
+    <ClangToolExe>$(ClangToolPath)\clang++.exe</ClangToolExe>
+
+    <RCToolPath>$(LLVMInstallFolder)\bin</RCToolPath>
+    <RCToolExe>$(RCToolPath)\windres.exe</RCToolExe>
+
+
+    <!--Set compiler and linker to GCC-->
+    <CompilerToolExe>$(ClangToolExe)</CompilerToolExe>
+    <CompilerToolPath>$(ClangToolPath)</CompilerToolPath>
+
+    <LinkerToolExe>$(ClangToolExe)</LinkerToolExe>
+    <LinkerToolPath>$(ClangToolPath)</LinkerToolPath>
+
+  </PropertyGroup>
+  
+
+  <!-- *******************************************************************************************
+        Import Microsoft.CppCommon.targets
+                => Microsoft.CppBuild.targets
+                    => Microsoft.BuildSteps.targets
+       ******************************************************************************************* -->
+  <Import Project="$(VCTargetsPath)\Microsoft.CppCommon.targets" />
+
+  <!-- Install custom Compile/Link/Lib actions -->
+  <Import Project="$(VCTargetsPath)\Platforms\$(Platform)\Platform.Common.targets" />
+
+  <Import Project="$(MSBuildThisFileDirectory)ImportAfter\*.targets" Condition="Exists('$(MSBuildThisFileDirectory)ImportAfter')" />
+</Project>
