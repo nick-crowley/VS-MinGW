@@ -75,6 +75,15 @@
     <None Include="MinGW32\PlatformToolsets\Clang_v3.8\Toolset.targets" />
     <None Include="MinGW32\PlatformToolsets\GCC_v4.8.1\Toolset.props" />
     <None Include="MinGW32\PlatformToolsets\GCC_v4.8.1\Toolset.targets" />
+    <None Include="TDM-Mingw32\Platform.Common.props" />
+    <None Include="TDM-Mingw32\Platform.Common.targets" />
+    <None Include="TDM-Mingw32\Platform.Default.props" />
+    <None Include="TDM-Mingw32\Platform.props" />
+    <None Include="TDM-Mingw32\Platform.targets" />
+    <None Include="TDM-Mingw32\PlatformToolsets\Clang_v3.8\Toolset.props" />
+    <None Include="TDM-Mingw32\PlatformToolsets\Clang_v3.8\Toolset.targets" />
+    <None Include="TDM-Mingw32\PlatformToolsets\GCC_v5.2\Toolset.props" />
+    <None Include="TDM-Mingw32\PlatformToolsets\GCC_v5.2\Toolset.targets" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="MinGW32\1033\cl_mingw.xml" />
@@ -85,6 +94,15 @@
     <Content Include="MinGW32\1033\link_mingw.xml" />
     <Content Include="MinGW32\1033\rc.xml" />
     <Content Include="MinGW32\1033\rc_mingw.xml" />
+    <Content Include="TDM-Mingw32\1033\cl_mingw.xml" />
+    <Content Include="TDM-Mingw32\1033\debugger_gdb.xml" />
+    <Content Include="TDM-Mingw32\1033\directories_mingw.xml" />
+    <Content Include="TDM-Mingw32\1033\general_mingw.xml" />
+    <Content Include="TDM-Mingw32\1033\lib_mingw.xml" />
+    <Content Include="TDM-Mingw32\1033\link_mingw.xml" />
+    <Content Include="TDM-Mingw32\1033\rc.xml" />
+    <Content Include="TDM-Mingw32\1033\rc_mingw.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

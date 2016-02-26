@@ -1,0 +1,20 @@
+﻿<!--
+***********************************************************************************************
+ MinGW : Platform actions
+
+ Platform.targets : Imports the stock, platform, and toolset actions
+***********************************************************************************************
+-->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+
+
+  <!-- *******************************************************************************************
+        Import Microsoft.Cpp.Platform.targets
+                => Toolset.Targets
+                => Platform.Common.Targets
+       ******************************************************************************************* -->
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Platform.targets"/>
+  
+</Project>

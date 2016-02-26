@@ -1,0 +1,52 @@
+﻿<!--
+***********************************************************************************************
+ MinGW : Platform properties
+
+ Platform.props : Imports the stock, platform, and toolset properties
+***********************************************************************************************
+-->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  
+  <!--Ensure '_PlatformFolder' is set correctly (unecessary)-->
+  <PropertyGroup>
+    <_PlatformFolder>$(MSBuildThisFileDirectory)</_PlatformFolder>
+  </PropertyGroup>
+
+
+  <!-- Tools location -->
+  <PropertyGroup>
+    <!--Create tools path properties-->
+    <ArchiveToolPath></ArchiveToolPath>
+    <ArchiveToolExe></ArchiveToolExe>
+
+    <StripToolPath></StripToolPath>
+    <StripToolExe></StripToolExe>
+
+    <GccToolPath></GccToolPath>
+    <GccToolExe></GccToolExe>
+
+    <ClangToolPath></ClangToolPath>
+    <ClangToolExe></ClangToolExe>
+
+    <RCToolPath></RCToolPath>
+    <RCToolExe></RCToolExe>
+
+    <!--Create compiler/linker path properties-->
+    <CompilerToolExe></CompilerToolExe>
+    <CompilerToolPath></CompilerToolPath>
+
+    <LinkerToolExe></LinkerToolExe>
+    <LinkerToolPath></LinkerToolPath>
+  </PropertyGroup>
+
+
+  <!-- *******************************************************************************************
+        Import Microsoft.Cpp.Platform.props
+                => Toolset.Props
+                => Platform.Common.Props
+       ******************************************************************************************* -->
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Platform.props"/>
+  
+
+</Project>

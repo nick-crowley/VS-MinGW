@@ -1,0 +1,87 @@
+﻿<!--
+***********************************************************************************************
+ MinGW : Default platform properties
+
+ Platform.Default.props : Setup default 
+***********************************************************************************************
+-->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- Import Before -->
+  <Import Condition="Exists('$(MSBuildThisFileDirectory)ImportBefore\Default')" Project="$(MSBuildThisFileDirectory)ImportBefore\Default\*.props" />
+
+
+  <!-- *******************************************************************************************
+        Project defaults
+       ******************************************************************************************* -->
+  <PropertyGroup>
+    <!--Define platform properties-->
+    <PlatformShortName>TDM-Mingw32</PlatformShortName>
+    <PlatformArchitecture>32</PlatformArchitecture>
+    <PlatformTarget>x86</PlatformTarget>
+    <DefaultPlatformToolset>GCC_v5.2</DefaultPlatformToolset>
+		
+		<!-- <ConfigurationType>Application</ConfigurationType> -->
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+
+    <!-- Have to maintain compatibility with VS2010 projects, which might not have toolset defined in the project-->
+    <PlatformToolset Condition="'$(PlatformToolset)' == ''">$(DefaultPlatformToolset)</PlatformToolset>
+
+    <!-- Required for enabling Team Build for packaging Windows Store app projects -->
+    <OutDirWasSpecified Condition=" '$(OutDir)'!='' AND '$(OutDirWasSpecified)'=='' ">true</OutDirWasSpecified>
+    <OutDirWasSpecified Condition=" '$(OutDir)'=='' AND '$(OutDirWasSpecified)'=='' ">false</OutDirWasSpecified>
+  </PropertyGroup>
+
+  <!-- *******************************************************************************************
+        GDB Server Location
+       ******************************************************************************************* -->
+  <!-- <PropertyGroup>
+    <_PropertySheetDisplayName>Use of STL</_PropertySheetDisplayName>
+    <GdbServerPath Condition="'$(GdbServerPath)' == ''">F:\MinGW\bin\gdbserver.exe</GdbServerPath>
+  </PropertyGroup> -->
+
+
+  <!-- *******************************************************************************************
+        Binaries and headers location
+       ******************************************************************************************* -->
+  <PropertyGroup>
+    <StdLibIncludePath>$(MinGWInstallFolder)\lib\gcc\x86_64-w64-mingw32\5.1.0\include\c++;$(MinGWInstallFolder)\lib\gcc\x86_64-w64-mingw32\5.1.0\include\c++\x86_64-w64-mingw32\32</StdLibIncludePath>
+    <StdLibLibraryPath>$(MinGWInstallFolder)\lib\gcc\x86_64-w64-mingw32\5.1.0\32;$(MinGWInstallFolder)\lib</StdLibLibraryPath>
+    <WinApiIncludePath>$(MinGWInstallFolder)\x86_64-w64-mingw32\include</WinApiIncludePath>
+    <WinApiLibraryPath>$(MinGWInstallFolder)\x86_64-w64-mingw32\lib32</WinApiLibraryPath>
+    <MingIncludePath>$(MinGWInstallFolder)\lib\gcc\x86_64-w64-mingw32\5.1.0\include\ssp;$(MinGWInstallFolder)\lib\gcc\x86_64-w64-mingw32\5.1.0\include;$(MinGWInstallFolder)\include</MingIncludePath>
+    
+    <ExecutablePath>$(MinGWInstallFolder)\bin;$(MSBuild_ExecutablePath);$(PATH)</ExecutablePath>
+    <IncludePath>$(MingIncludePath);$(StdLibIncludePath);$(WinApiIncludePath);$(IncludePath)</IncludePath>
+    <LibraryPath>$(StdLibLibraryPath);$(WinApiLibraryPath);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+
+  <!-- *******************************************************************************************
+        Default compiler options
+       ******************************************************************************************* -->
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <CppLanguageStandard>c++11</CppLanguageStandard>
+      <StrictAliasing>false</StrictAliasing>
+    </ClCompile>
+  </ItemDefinitionGroup>
+
+  <!-- *******************************************************************************************
+        ?? Additional locations
+       ******************************************************************************************* -->
+  <ItemGroup>
+    <!-- <BuildMacro Include="StlAdditionalDependencies">
+      <Value>$(StdLibLibraryPath)</Value>
+    </BuildMacro>
+    <BuildMacro Include="StlIncludeDirectories">
+      <Value>$(StlIncludeDirectories)</Value>
+    </BuildMacro> -->
+  </ItemGroup>
+  
+  
+  <!-- Import After -->
+  <Import Condition="Exists('$(MSBuildThisFileDirectory)ImportAfter\Default')" Project="$(MSBuildThisFileDirectory)ImportAfter\Default\*.props" />
+</Project>

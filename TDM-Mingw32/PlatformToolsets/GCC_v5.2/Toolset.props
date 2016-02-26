@@ -1,0 +1,41 @@
+﻿<!--
+***********************************************************************************************
+ TDM-MinGW / GCC v5.2 : Toolset properties
+
+ Toolset.props : Defines the locations of binaries, headers, and libraries for GCC
+***********************************************************************************************
+-->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildThisFileDirectory)ImportBefore\*.props" Condition="Exists('$(MSBuildThisFileDirectory)ImportBefore')" />
+
+  <!-- *******************************************************************************************
+        Import Platform.Common.props
+       ******************************************************************************************* -->
+  <Import Project="$(VCTargetsPath)\Platforms\$(Platform)\Platform.Common.props" />
+
+
+  <!--Compiler Settings-->
+  <PropertyGroup>
+    <GNUMode>true</GNUMode>
+    <MSVCErrorReport>false</MSVCErrorReport>
+		
+		<!--Highlight missing folders -->
+		<TDMInstallFolder Condition="'$(TDMInstallFolder)' == ''">MISSING</TDMInstallFolder>
+  </PropertyGroup>
+
+  
+  <ItemDefinitionGroup>
+		<!--Define path of operating system and standard library headers-->
+    <ClCompile>
+      <SystemIncludeDirectories>$(IncludePath);$(StdLibIncludePath)</SystemIncludeDirectories>
+    </ClCompile>
+		
+    <Link>
+      <AdditionalLibraryDirectories>$(TDMInstallFolder)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SharedLibrarySearchPath>$(TDMInstallFolder)\lib;%(SharedLibrarySearchPath)</SharedLibrarySearchPath>
+    </Link>
+  </ItemDefinitionGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)ImportAfter\*.props" Condition="Exists('$(MSBuildThisFileDirectory)ImportAfter')" />
+</Project>
