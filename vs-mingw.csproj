@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--Project was exported from assembly: C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Platforms\MinGW\Microsoft.Build.CPPTasks.Android.dll-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{07E8697F-0989-4D9C-B094-677B46A84C0F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>vs-mingw.Build.CPPTasks.MinGW</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <ApplicationVersion>14.0.0.0</ApplicationVersion>
+    <FileAlignment>512</FileAlignment>
+    <RootNamespace>Microsoft.Build</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Xml" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Utilities.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CPPTasks\MingRC.cs" />
+    <Compile Include="Shared\AssemblyResources.cs" />
+    <Compile Include="Shared\ErrorUtilities.cs" />
+    <Compile Include="Shared\ExceptionHandling.cs" />
+    <Compile Include="Shared\FileUtilities.cs" />
+    <Compile Include="Shared\InternalErrorException.cs" />
+    <Compile Include="Shared\NativeMethodsShared.cs" />
+    <Compile Include="Shared\ResourceUtilities.cs" />
+    <Compile Include="CPPTasks\MingCompile.cs" />
+    <Compile Include="CPPTasks\Archive.cs" />
+    <Compile Include="CPPTasks\MingLink.cs" />
+    <Compile Include="CPPTasks\VCToolTask.cs" />
+    <Compile Include="CPPTasks\VCTaskNativeMethods.cs" />
+    <Compile Include="CPPTasks\PropertyRelation.cs" />
+    <Compile Include="CPPTasks\ArgumentRelation.cs" />
+    <Compile Include="CPPTasks\ToolSwitchType.cs" />
+    <Compile Include="CPPTasks\ToolSwitch.cs" />
+    <Compile Include="CPPTasks\TrackedVCToolTask.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CPPTasks\Strings.resx" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
